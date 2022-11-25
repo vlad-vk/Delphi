@@ -2,7 +2,6 @@ unit disomat;
 
 interface
 
-// Подключаемые модули
 uses
   Windows, Messages, SysUtils, Variants, Classes,
   Graphics, Controls, Forms, Dialogs, StdCtrls,
@@ -11,33 +10,31 @@ uses
 // Переменные формы
 type
   TForm01 = class(TForm)
-    Button01: TButton;
-    Button02: TButton;
-    STAT: TStaticText;
-    TEXT: TStaticText;
-    CPDrv01: TCommPortDriver;
-    SND: TStaticText;
-    RCV: TStaticText;
-    Timer02: TTimer;
-    INIT: TStaticText;
-    Timer01: TTimer;
-    procedure Button02Click(Sender: TObject);
-    procedure InitCOMPort;
-    procedure InitCOMPortF(Sender: TObject);
-    procedure Timer02Timer(Sender: TObject);
-    // Процедура компоненты CPDrv, которая отрабатывает при
-    // приеме данных в COM порт
-    procedure CPDrv01ReceiveData(Sender: TObject; DataPtr: Pointer;
-      DataSize: Cardinal);
-    function  SENDChar(CC: Char): integer;
-    procedure Timer01Timer(Sender: TObject);
+    Button01:   TButton;
+    Button02:   TButton;
+    STAT:       TStaticText;
+    TEXT:       TStaticText;
+    CPDrv01:    TCommPortDriver;
+    SND:        TStaticText;
+    RCV:        TStaticText;
+    Timer02:    TTimer;
+    INIT:       TStaticText;
+    Timer01:    TTimer;
+    procedure   Button02Click(Sender: TObject);
+    procedure   InitCOMPort;
+    procedure   InitCOMPortF(Sender: TObject);
+    procedure   Timer02Timer(Sender: TObject);
+    // Процедура которая отрабатывает при приеме данных в COM порт
+    procedure   CPDrv01ReceiveData(Sender: TObject; DataPtr: Pointer; DataSize: Cardinal);
+    function    SENDChar(CC: Char): integer;
+    procedure   Timer01Timer(Sender: TObject);
   private
-    procedure ViewControls;
+    procedure   ViewControls;
   public
     constructor Create( AOwner: TComponent; ACPDrv: TCommPortDriver ); reintroduce; virtual;
   end;
 
-  // Общие процедуры и переменные
+    // Общие процедуры и переменные
     procedure   ClearRBuf;
     procedure   ClearSBuf;
     procedure   FillSBuf;
@@ -79,16 +76,16 @@ uses vvod;
 {$R *.dfm}
 
 const
-         SON = $01;
-         STX = $02;
-         ETX = $03;
-         EOT = $04;
-         ENQ = $05;
-         ACK = $06;
-         NAK = $15;
-         POL = $70;
+        SON = $01;
+        STX = $02;
+        ETX = $03;
+        EOT = $04;
+        ENQ = $05;
+        ACK = $06;
+        NAK = $15;
+        POL = $70;
 
-var      CM1: array [0..11] of char = #5+#2+'01#TG#'+#3+#9;
+var     CM1: array [0..11] of char = #5 + #2 + '01#TG#' + #3 + #9;
 
 //-------------------------------------------------------------------------
 // создание формы
@@ -102,9 +99,10 @@ end;
 //-------------------------------------------------------------------------
 // очистка пользовательского буфера приема
 procedure ClearRBuf;
-var    a: integer;
+var a: integer;
 begin
-   for a:=0 to 100 do rcBuf[a]:=Chr(0); cpBRC:=0;
+   for a := 0 to 100 do rcBuf[a] := Chr(0);
+   cpBRC := 0;
 end;
 //-------------------------------------------------------------------------
 
@@ -112,9 +110,10 @@ end;
 //-------------------------------------------------------------------------
 // очистка пользовательского буфера передачи
 procedure ClearSBuf;
-var    a: integer;
+var a: integer;
 begin
-   for a:=0 to 100 do snBuf[a]:=Chr(0); cpBSN:=0;
+   for a := 0 to 100 do snBuf[a] :=Chr(0);
+   cpBSN := 0;
 end;
 //-------------------------------------------------------------------------
 
@@ -123,8 +122,11 @@ end;
 // заполнения буфера передачи и отображения
 procedure FillSBuf;
 begin
-   snBuf[cpBSN]:=csChr; cpBSN:=cpBSN + 1;
-    sVIS[cpVIS]:=csChr; rVIS[cpVIS]:=' '; cpVIS:=cpVIS+1;
+    snBuf[cpBSN] := csChr;
+    cpBSN := cpBSN + 1;
+    sVIS[cpVIS] := csChr;
+    rVIS[cpVIS] := ' ';
+    cpVIS := cpVIS + 1;
 end;
 //-------------------------------------------------------------------------
 
@@ -426,7 +428,7 @@ begin
         if (TempI > 0) then iostp:=53;
     end;
     // Прием строки ответа от DISOMAT
-    if iostp=54 then iost1:=0;
+    if iostp = 54 then iost1 := 0;
     // Заполнение строки отображения приема
     FillRBuf;
 end;
@@ -436,9 +438,9 @@ end;
 // Вызываем раз в 10 секунд для подсчета запросов
 procedure TForm01.Timer01Timer(Sender: TObject);
 begin
-   HR10s:=HR10o; HR10o:=0;
+   HR10s := HR10o;
+   HR10o := 0;
 end;
 
 end.
 //-------------------------------------------------------------------------
-
